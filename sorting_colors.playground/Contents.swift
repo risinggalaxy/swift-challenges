@@ -14,8 +14,13 @@ import XCTest
  Is there a more efficient technique or algorithm you could implement to sort the color sequence?
  */
 
+var input = [0,1,0,2,1,1,2,2,2,2,0,0,0,0,1,1,0,1,2,2,2,2,0,0,0,1,1]
+
+
+
 class ColorSort {
-    func sort( _ input: [Int]) -> [Int] {
+    
+    func sortColors( _ input: [Int]) -> [Int] {
         guard input.count > 1 else { return input }
         var lhs = [Int]()
         var rhs = [Int]()
@@ -32,15 +37,42 @@ class ColorSort {
         }
         return lhs + equal + rhs
     }
+    
+    //Using inout effecting input array
+    func sortColors( _ input: inout [Int]) {
+        guard input.count > 1 else { return }
+        var lhs = [Int]()
+        var rhs = [Int]()
+        var equal = [Int]()
+        for i in 0..<input.count {
+            let value = input[i]
+            if value < 1 {
+                lhs.append(value)
+            } else if value > 1 {
+                rhs.append(value)
+            } else if value == 1 {
+                equal.append(value)
+            }
+        }
+        input = lhs + equal + rhs
+    }
 }
 
 class TestSortingColors: XCTestCase {
     func testSortingColors() {
         let colorSort = ColorSort()
         let input = [0,1,0,2,1,1,2,2,2,2,0,0,0,0,1,1,0,1,2,2,2,2,0,0,0,1,1]
-        let result = colorSort.sort(input)
+        let result = colorSort.sortColors(input)
         let testData = [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2]
         XCTAssertEqual(result, testData)
+    }
+    
+    func testSortingColorsWithInoutParameter() {
+        let colorSort = ColorSort()
+        var input = [0,1,0,2,1,1,2,2,2,2,0,0,0,0,1,1,0,1,2,2,2,2,0,0,0,1,1]
+        colorSort.sortColors(&input)
+        let testData = [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2]
+        XCTAssertEqual(input, testData)
     }
 }
 
