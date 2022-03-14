@@ -38,11 +38,16 @@ class FindCommonCharacters {
         for c in lhsArr {
             if rhsArr.contains(c) {
                 result.append(c)
-            }
+            } 
         }
         return result
     }
 }
+
+
+let test = FindCommonCharacters()
+let result = test.check(["cool","lock","cook"])
+print(result)
 
 class TestFindCommonCharacters: XCTestCase {
     
