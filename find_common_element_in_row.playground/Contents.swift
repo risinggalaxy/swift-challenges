@@ -12,7 +12,9 @@ import XCTest
  */
 
 class FindCommonElement {
+    
     func find(_ value: [[Int]]) -> Int {
+        
         guard value.count > 0 else { return .zero }
         let start = Date()
         var hashMap = [Int: Bool]()
@@ -36,7 +38,8 @@ class FindCommonElement {
         let component = Calendar.current.dateComponents([.nanosecond], from: start, to: end)
         let milliseconds = Double(component.nanosecond! / 1000000)
         print("Algorithm runtime in milliseconds: \(milliseconds)")
-        return hashMap.isEmpty ? -1 : min(hashMap)
+        
+        return hashMap.isEmpty ? -1 : self.min(hashMap)
     }
     
     private func min( _ hashMap: [Int: Bool] ) -> Int {
@@ -59,7 +62,6 @@ class FindCommonElement {
                 }
             }
         }
-        
         if lhs != nil && rhs == nil {
             return lhs!
         } else {
