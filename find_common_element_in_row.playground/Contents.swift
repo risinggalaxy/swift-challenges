@@ -1,5 +1,6 @@
 import Foundation
 import XCTest
+import Darwin
 /*
  Find Common Element in Rows
  Given a matrix where every row is sorted in increasing order, return the smallest common element in all rows.
@@ -44,29 +45,12 @@ class FindCommonElement {
     
     private func min( _ hashMap: [Int: Bool] ) -> Int {
         guard !hashMap.isEmpty else { return -1 }
-        if hashMap.count == 1 {
-            return hashMap.first!.key
-        }
-        var lhs: Int?
-        var rhs: Int?
+        var x : Int?
         for (key, _ ) in hashMap {
-            if lhs == nil {
-                lhs = key
-            } else {
-                //Always assuming that left holds the min value
-                if lhs! > key {
-                    rhs = lhs
-                    lhs = key
-                } else {
-                    rhs = key
-                }
-            }
+            if x == nil { x = key }
+            x = x! < key ? x : key
         }
-        if lhs != nil && rhs == nil {
-            return lhs!
-        } else {
-            return lhs! < rhs! ? lhs! : rhs!
-        }
+        return x!
     }
 }
 
@@ -91,6 +75,13 @@ class TestFindCommonElement: XCTestCase {
         let result = sut.find(matrix)
         XCTAssertEqual(result, expectedResult)
     }
+
+    func testFindsSingleCommonElementElement() {
+        let matrix = [[1,2,3,4,5,8],[1,3,4,5,8],[1,2,4,5,8],[1,2,3,4,8],[1,2,3,4,5]]
+        let expectedResult = 1
+        let result = sut.find(matrix)
+        XCTAssertEqual(result, expectedResult)
+    }
     
     func testCannotFindAnyCommonElement() {
         let matrix = [[2,3,4,8],[2,4,5,8,10,1], [3,5,7,9,11,1],[1,3,5,7,8,9]]
@@ -98,7 +89,6 @@ class TestFindCommonElement: XCTestCase {
         let result = sut.find(matrix)
         XCTAssertEqual(result, expectedResult)
     }
-    
 }
 
 class TestObservation: NSObject, XCTestObservation {
