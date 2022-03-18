@@ -15,7 +15,7 @@ import Darwin
 class FindCommonElement {
     
     func find(_ value: [[Int]]) -> Int {
-        
+    
         guard value.count > 0 else { return .zero }
         let start = Date()
         var hashMap = [Int: Bool]()
