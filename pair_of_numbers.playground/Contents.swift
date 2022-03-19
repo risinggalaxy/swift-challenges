@@ -11,30 +11,47 @@ import Foundation
  The main objective is calculating which numbers can be paired to achieve the expected result.
  How could this work, assuming your algorithm is only permitted to scan the sequence once?
  */
-func pairValues(_ sequence:[Int], _ num: Int) -> [Int]{ //O(n)
-    let start = Date()
-    let isNegative = num < 0
-    let absValue = abs(num)
-    guard sequence.count > 1 else { return [Int]()}
-    let m = sequence.count
-    var hash = [Int:Bool]()
-    var result = [Int]()
-    for n in 0..<m {
-        let x = sequence[n]
-        if hash[abs(x - absValue)] != nil {
-            result.append(isNegative ? -x : x)
-            result.append(isNegative ? -((-x) - (-absValue)) : abs(x - absValue))
-        }
-        hash[x] = true
-    }
-    let end = Date()
-    let component = Calendar.current.dateComponents([.nanosecond], from: start, to: end)
-    let milliseconds = Double(component.nanosecond! / 1000000)
-    print("Runtime : \(milliseconds)")
-    return result
-}
-let result = pairValues([2,4,3,1,6,8,7,5,9], 10)
-print(result)
 
-let nResult = pairValues([2,4,3,1,6,8,7,5,9], -10)
-print(nResult)
+    func fastPairValues(_ s:[Int], _ g: Int) -> [Int]{ //O(n)
+        let isNegative = g < 0
+        let absValue = abs(g)
+        guard s.count > 1 else { return [Int]()}
+        let m = s.count
+        var hash = [Int:Int]()
+        var res = [Int]()
+        for n in 0..<m {
+            let x = s[n]
+            if hash[abs(x - absValue)] != nil && x + hash[abs(x - absValue)]! == absValue {
+                    res.append(isNegative ? -x : x)
+                    res.append(isNegative ? -((-x) - (-absValue))
+                               : abs(x - absValue))
+            }
+            hash[x] = x
+        }
+        return res
+    }
+    
+    func pairValueExpensive( _ s: [Int], _ g: Int) -> [Int] { //O(n^2)
+        let isNegative = g < 0
+        let absValue = abs(g)
+        guard s.count > 1 else {return [Int]()}
+        let m = s.count
+        var n = 0
+        var res = [Int]()
+        while n < m {
+            let x = s[n]
+            for i in n + 1..<m {
+                if abs(x + s[i]) == absValue {
+                    res.append(isNegative ? -x : x )
+                    res.append(isNegative ? -(s[i]) : s[i])
+                }
+            }
+            n += 1
+        }
+        return res
+    }
+
+let result = fastPairValues([2,4,3,1,6,8,7,5,9,10,11,12,15,14,16,18,17,13,19], 30)
+print(result)
+let resultExpensive = pairValueExpensive([2,4,3,1,6,8,7,5,9,10,11,12,15,14,16,18,17,13,19], 30)
+print(resultExpensive)
